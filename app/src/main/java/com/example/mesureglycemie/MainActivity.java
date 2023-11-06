@@ -66,39 +66,57 @@ public class MainActivity extends AppCompatActivity
 
             private void calculer(View v)
             {
-                String contenuTexte = etvaleur.getText().toString();
-                double niveauGlycemie = Double.parseDouble(contenuTexte);
-                boolean estAJean = rboui.isChecked();
-                String message;
-
-                if (estAJean)
-                {
-                    if (niveauGlycemie >= 5.0 && niveauGlycemie <= 7.2)
-                    {
-                        message = "Le niveau de glycémie est normal avant le repas ";
-                    }
-                    else if (niveauGlycemie < 5.0)
-                    {
-                        message = "Le niveau de glycémie est trop bas avant le repas ";
-                    }
-                    else
-                    {
-                        message = "Le niveau de glycémie est trop élevé avant le repas";
-                    }
-                }
+                int age ;
+                float valeur;
+                boolean verifAge = false , verifValeur = false ;
+                if(sbage.getProgress()!=0)
+                    verifAge= true ;
                 else
+                    Toast.makeText(MainActivity.this,"Veuillez verifier votre age",Toast.LENGTH_SHORT).show();
+                if(!etvaleur.getText().toString().isEmpty())
+                        verifValeur=true;
+                else
+                    Toast.makeText(MainActivity.this, "Veuillez verifier votre valeur mesure", Toast.LENGTH_LONG).show();
+                if(verifAge && verifValeur)
                 {
-                    if (niveauGlycemie < 10.5)
-                    {
-                        message = "Le niveau de glycémie est normal après le repas";
-                    }
-                    else
-                    {
-                        message = "Le niveau de glycémie est trop élevé après le repas";
-                    }
-                }
+                    String contenuTexte = etvaleur.getText().toString();
+                    double niveauGlycemie = Double.parseDouble(contenuTexte);
 
-                tvresultat.setText(message);
+                    int contenuAge = sbage.getProgress();
+
+                    boolean estAJean = rboui.isChecked();
+
+                    String message;
+
+                    if (estAJean) {
+                        if (contenuAge >= 13) {
+                            if (niveauGlycemie < 5.0)
+                                message = "Le niveau de glycémie est bas avant le repas ";
+                            else if (niveauGlycemie >= 5.0 && niveauGlycemie <= 7.2)
+                                message = "Le niveau de glycémie est nomal avant le repas ";
+                            else
+                                message = "Le niveau de glycémie est élevé avant le repas";
+                        } else if (contenuAge >= 6 && contenuAge <= 12)
+                            if (niveauGlycemie < 5.0)
+                                message = "Le niveau de glycémie est bas avant le repas";
+                            else if (niveauGlycemie >= 5.0 && niveauGlycemie <= 10.0)
+                                message = "Le niveau de glycémie est normal avant le repas";
+                            else
+                                message = "Le niveau de glycémie est élevé avant le repas";
+                        else if (niveauGlycemie < 5.5)
+                            message = "Le niveau de glycémie est bas avant le repas";
+                        else if (niveauGlycemie >= 5.0 && niveauGlycemie <= 10.0)
+                            message = "Le niveau de glycémie est normal avant le repas";
+                        else
+                            message = "Le niveau de glycémie est élevé avant le repas";
+                    }
+                   else
+                       if(niveauGlycemie<10.5)
+                           message="Le niveau de glycémie est normal apres le repas";
+                       else
+                           message="Le niveau de glycémie est élevé apres le repas";
+                    tvresultat.setText(message);
+                }
             }
         });
 
